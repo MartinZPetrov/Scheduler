@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchedulerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="Group_Ref" />
+    </Key>
+    <Property Name="Group_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Color" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GroupMembers">
+    <Key>
+      <PropertyRef Name="GroupMembers" />
+    </Key>
+    <Property Name="GroupMembers" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Group_Ref" Type="int" Nullable="false" />
+    <Property Name="User_Ref" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Thread" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Level" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Logger" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Message" Type="varchar" MaxLength="4000" Nullable="false" />
+    <Property Name="Exception" Type="varchar" MaxLength="2000" />
+  </EntityType>
+  <EntityType Name="Schedule">
+    <Key>
+      <PropertyRef Name="Schedule_Ref" />
+    </Key>
+    <Property Name="Schedule_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FromDate" Type="date" />
+    <Property Name="ToDate" Type="date" />
+    <Property Name="StartTime" Type="int" Nullable="false" />
+    <Property Name="EndTime" Type="int" Nullable="false" />
+    <Property Name="Accepted" Type="bit" Nullable="false" />
+    <Property Name="Site_Ref" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Scheduledetails">
+    <Key>
+      <PropertyRef Name="ScheduleDetails_Ref" />
+    </Key>
+    <Property Name="ScheduleDetails_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Schedule_Ref" Type="int" Nullable="false" />
+    <Property Name="Group_Ref" Type="int" Nullable="false" />
+    <Property Name="Day" Type="date" />
+    <Property Name="Col1" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col2" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col3" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col4" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col5" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col6" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col7" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col8" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col9" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col10" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col11" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col12" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col13" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col14" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col15" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col16" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col17" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col18" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col19" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col20" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col21" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col22" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col23" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Col24" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="WeekNum" Type="int" Nullable="false" />
+    <Property Name="WeekStart" Type="date" />
+    <Property Name="WekkEnd" Type="date" />
+  </EntityType>
+  <EntityType Name="Site">
+    <Key>
+      <PropertyRef Name="Site_Ref" />
+    </Key>
+    <Property Name="Site_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SiteMembers">
+    <Key>
+      <PropertyRef Name="SiteMember_Ref" />
+    </Key>
+    <Property Name="SiteMember_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Site_Ref" Type="int" Nullable="false" />
+    <Property Name="User_Ref" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="User_ref" />
+    </Key>
+    <Property Name="User_ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="varchar(max)" Nullable="false" />
+    <Property Name="SurName" Type="varchar(max)" Nullable="false" />
+    <Property Name="Mail" Type="varchar(max)" Nullable="false" />
+    <Property Name="PhoneNumber" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IsManager" Type="bit" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="UserLevel" Type="int" Nullable="false" />
+    <Property Name="Password" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserImages">
+    <Key>
+      <PropertyRef Name="User_Ref" />
+    </Key>
+    <Property Name="Image_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Ref" Type="int" Nullable="false" />
+    <Property Name="Image" Type="image" />
+  </EntityType>
+  <EntityType Name="Work">
+    <Key>
+      <PropertyRef Name="Work_Ref" />
+    </Key>
+    <Property Name="Work_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Ref" Type="int" Nullable="false" />
+    <Property Name="Site_Ref" Type="int" Nullable="false" />
+    <Property Name="WorkStart" Type="datetime" />
+    <Property Name="WorkEnd" Type="datetime" />
+    <Property Name="WorkDay" Type="date" />
+  </EntityType>
+  <EntityType Name="WorkImages">
+    <Key>
+      <PropertyRef Name="WorkImage_Ref" />
+    </Key>
+    <Property Name="WorkImage_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Work_Ref" Type="int" Nullable="false" />
+    <Property Name="Image" Type="image" />
+    <Property Name="IsWorkStart" Type="bit" />
+  </EntityType>
+  <Association Name="FK_GroupMembers_Groups">
+    <End Role="Group" Type="Self.Group" Multiplicity="1" />
+    <End Role="GroupMembers" Type="Self.GroupMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Group_Ref" />
+      </Principal>
+      <Dependent Role="GroupMembers">
+        <PropertyRef Name="Group_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupMembers_Users">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="GroupMembers" Type="Self.GroupMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="GroupMembers">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Schedule_Site">
+    <End Role="Site" Type="Self.Site" Multiplicity="1" />
+    <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Site_Ref" />
+      </Principal>
+      <Dependent Role="Schedule">
+        <PropertyRef Name="Site_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Scheduledetails_Schedule">
+    <End Role="Schedule" Type="Self.Schedule" Multiplicity="1" />
+    <End Role="Scheduledetails" Type="Self.Scheduledetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Schedule">
+        <PropertyRef Name="Schedule_Ref" />
+      </Principal>
+      <Dependent Role="Scheduledetails">
+        <PropertyRef Name="Schedule_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SiteMembers_Site">
+    <End Role="Site" Type="Self.Site" Multiplicity="1" />
+    <End Role="SiteMembers" Type="Self.SiteMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Site_Ref" />
+      </Principal>
+      <Dependent Role="SiteMembers">
+        <PropertyRef Name="Site_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SiteMembers_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="SiteMembers" Type="Self.SiteMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="SiteMembers">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserImages_User">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserImages" Type="Self.UserImages" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="UserImages">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Work_Site">
+    <End Role="Site" Type="Self.Site" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Work" Type="Self.Work" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Site_Ref" />
+      </Principal>
+      <Dependent Role="Work">
+        <PropertyRef Name="Site_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Work_User">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Work" Type="Self.Work" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="Work">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WorkImages_Work">
+    <End Role="Work" Type="Self.Work" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="WorkImages" Type="Self.WorkImages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Work">
+        <PropertyRef Name="Work_Ref" />
+      </Principal>
+      <Dependent Role="WorkImages">
+        <PropertyRef Name="Work_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="SchedulerModelStoreContainer">
+    <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GroupMembers" EntityType="Self.GroupMembers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Scheduledetails" EntityType="Self.Scheduledetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Site" EntityType="Self.Site" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SiteMembers" EntityType="Self.SiteMembers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserImages" EntityType="Self.UserImages" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Work" EntityType="Self.Work" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WorkImages" EntityType="Self.WorkImages" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_GroupMembers_Groups" Association="Self.FK_GroupMembers_Groups">
+      <End Role="Group" EntitySet="Group" />
+      <End Role="GroupMembers" EntitySet="GroupMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupMembers_Users" Association="Self.FK_GroupMembers_Users">
+      <End Role="User" EntitySet="User" />
+      <End Role="GroupMembers" EntitySet="GroupMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Schedule_Site" Association="Self.FK_Schedule_Site">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="Schedule" EntitySet="Schedule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Scheduledetails_Schedule" Association="Self.FK_Scheduledetails_Schedule">
+      <End Role="Schedule" EntitySet="Schedule" />
+      <End Role="Scheduledetails" EntitySet="Scheduledetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SiteMembers_Site" Association="Self.FK_SiteMembers_Site">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="SiteMembers" EntitySet="SiteMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SiteMembers_User" Association="Self.FK_SiteMembers_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="SiteMembers" EntitySet="SiteMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserImages_User" Association="Self.FK_UserImages_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserImages" EntitySet="UserImages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Work_Site" Association="Self.FK_Work_Site">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="Work" EntitySet="Work" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Work_User" Association="Self.FK_Work_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Work" EntitySet="Work" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WorkImages_Work" Association="Self.FK_WorkImages_Work">
+      <End Role="Work" EntitySet="Work" />
+      <End Role="WorkImages" EntitySet="WorkImages" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\France\Scheduler\Scheduler\obj\Debug\
+D:\TFS\Scheduler\Scheduler\obj\Debug\
 Scheduler
 none
 false
 DEBUG;TRACE
-D:\France\Scheduler\Scheduler\App.xaml
-5-278508369
+D:\TFS\Scheduler\Scheduler\App.xaml
+131953695855
 
-23-1845822947
-721746466712
-DictionaryResource.xaml;Support\HourGlass.xaml;Support\Throbber.xaml;Views\MainWindow.xaml;Views\UsersView.xaml;
+63-363931580
+97372139155
+Controls\FavouriteWeekControl.xaml;Controls\PickList.xaml;Controls\ScheduleControl.xaml;DictionaryResource.xaml;Support\HourGlass.xaml;Support\Throbber.xaml;Views\GroupsView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\ScheduleView.xaml;Views\SiteView.xaml;Views\TestView.xaml;Views\UsersView.xaml;
 
 False
 

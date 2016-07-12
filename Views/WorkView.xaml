@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="Scheduler.Views.WorkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             DataContext="{Binding Work, Source={StaticResource Locator}}"
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:local="clr-namespace:Scheduler">
+
+    <UserControl.Resources>
+        <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Work Start:"></Label>
+                <DatePicker SelectedDate="{Binding WorkDay, Mode=TwoWay}" />
+            </StackPanel>
+            <ListView x:Name="lvWorkStartTime" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="20" Width="1000"
+                ItemsSource="{Binding WorkStart}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"  HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock  Margin="75,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding WorkStart}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <ListView x:Name="lvWorkImages" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="200" Width="1000"
+                ItemsSource="{Binding WorkStartImages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"  HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding Image, Converter={StaticResource ByteArrayToImageConverter}}"></Image>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+                <Border BorderBrush="AliceBlue" BorderThickness="5">
+                    <Button Height="200" Width="230" >
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image x:Name="imgEmp" Source="{Binding PictureStartTaken, Converter={StaticResource ByteArrayToImageConverter}, Mode=TwoWay}" Grid.Column="10"  />
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Border>
+                <Button x:Name="btnPicStart" Width="100" Height="25" Click="btnPic_Click"  Background="White"  Content="Work Start"></Button>
+            
+            <Label Content="Work End"></Label>
+            <ListView x:Name="lvWorkEndTime" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="20" Width="1000"
+                ItemsSource="{Binding WorkEnd}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"  HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        
+                        <TextBlock  Margin="75,0,0,0" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding WorkEnd}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ListView x:Name="lvWorkEndImages" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="200" Width="1000"
+                ItemsSource="{Binding WorkEndImages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"  HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding Image, Converter={StaticResource ByteArrayToImageConverter}}"></Image>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <Border BorderBrush="AliceBlue" BorderThickness="5">
+                <Button Height="200" Width="230" >
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image x:Name="imgEmp" Source="{Binding PictureEndTaken, Converter={StaticResource ByteArrayToImageConverter}, Mode=TwoWay}" Grid.Column="10"  />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
+            <Button x:Name="btnPicEnd"  Width="100" Height="25" Click="btnPicEnd_Click"  Background="White"  Content="Work Emd"></Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

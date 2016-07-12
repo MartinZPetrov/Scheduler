@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Scheduler.ViewModel
 {
@@ -15,7 +16,7 @@ namespace Scheduler.ViewModel
         public string CommandDisplay { get; set; }
         public CommandMessage Message { get; set; }
         public RelayCommand Send { get; private set; }
-        public Geometry IconGeometry { get; set; }
+        public BitmapImage Icon { get; set; }
         public CommandVM()
         {
             Send = new RelayCommand(SendExecute);

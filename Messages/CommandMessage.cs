@@ -16,6 +16,14 @@ namespace Scheduler.Messages
         Edit,
         Delete,
         Commit,
-        Refresh
+        Refresh,
+        Undo,
+        Next,
+        Previous,
+        Top,
+        Bottom,
+        InsertChild, 
+        DeleteChild,
+        PrintPDF
     }
 }

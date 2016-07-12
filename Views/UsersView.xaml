@@ -3,26 +3,134 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             DataContext="{Binding Users, Source={StaticResource Locator}}"
+             xmlns:local="clr-namespace:Scheduler">
+    
+    <UserControl.Resources>
+        <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
+    </UserControl.Resources>
+
     <Grid>
-        <DataGrid AutoGenerateColumns="False"
-                  ItemsSource="{Binding Users}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
+        <TabControl HorizontalAlignment="Left" >
+            <TabItem Header="Edit" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock HorizontalAlignment="Right" Margin="4" Text="First Name:"></TextBlock>
+                    <TextBox Grid.Column="1" Text="{Binding WorkAliasCollection.View.CurrentItem.FirstName, Mode=TwoWay}"  
+                		    HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Margin="4" 
+                		    VerticalAlignment="Top" Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="1" Margin="4" Text="Surname:"></TextBlock>
+                    <TextBox  HorizontalAlignment="Left" Grid.Row ="1" Grid.Column="1" Text="{Binding WorkAliasCollection.View.CurrentItem.SurName, Mode=TwoWay}"  
+                		     Height="23" TextWrapping="Wrap" Margin="4" 
+                		        VerticalAlignment="Top" Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="2" Margin="4" Text="Last Name:"></TextBlock>
+                    <TextBox  HorizontalAlignment="Right" Grid.Row ="2" Grid.Column="1" Text="{Binding WorkAliasCollection.View.CurrentItem.LastName, Mode=TwoWay}"  
+                		         Height="23" TextWrapping="Wrap" Margin="4" 
+                		            VerticalAlignment="Top" Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="3" Margin="4" Text="E-Mail:"></TextBlock>
+                    <TextBox  HorizontalAlignment="Right" Grid.Row ="3" Grid.Column="1" Text="{Binding WorkAliasCollection.View.CurrentItem.Mail, Mode=TwoWay}"  
+                		         Height="23" TextWrapping="Wrap" Margin="4"
+                              LostFocus="TextBox_LostFocus"
+                		            VerticalAlignment="Top" Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="4" Margin="4" Text="Phone Number:"></TextBlock>
+                    <TextBox  HorizontalAlignment="Right" Grid.Row ="4" Grid.Column="1" 
+                              Text="{Binding WorkAliasCollection.View.CurrentItem.PhoneNumber, Mode=TwoWay}"  
+                		         Height="23" TextWrapping="Wrap" Margin="4" 
+                		            VerticalAlignment="Top" Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="5" Margin="4" Text="City:"></TextBlock>
+                    <TextBox  HorizontalAlignment="Right" Grid.Row ="5" Grid.Column="1" 
+                              Text="{Binding WorkAliasCollection.View.CurrentItem.City, Mode=TwoWay}"  
+                		         Height="23" TextWrapping="Wrap" Margin="4" 
+                		            VerticalAlignment="Top" Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="6" Margin="4" Text="Manager: "></TextBlock>
+                    <CheckBox  HorizontalAlignment="Center" Grid.Row ="6" Grid.Column="1" 
+                              IsChecked="{Binding WorkAliasCollection.View.CurrentItem.IsManager, Mode=TwoWay}"  
+                		          Margin="4" VerticalAlignment="Center"  
+                		             Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="7" Margin="4" Text="Active: "></TextBlock>
+                    <CheckBox  HorizontalAlignment="Center" Grid.Row ="7" Grid.Column="1" 
+                              IsChecked="{Binding WorkAliasCollection.View.CurrentItem.IsActive, Mode=TwoWay}"  
+                		          Margin="4" VerticalAlignment="Center"  
+                		             Width="240" />
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="8" Margin="4" Text="User Level: "></TextBlock>
+                    <xctk:IntegerUpDown  HorizontalAlignment="Left" Grid.Row ="8" Grid.Column="1" Width="50"
+                                           Value="{Binding WorkAliasCollection.View.CurrentItem.UserLevel}"
+                		          Margin="4" VerticalAlignment="Center" />
+
+
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="9" Margin="4" Text="Password:"/>
+                    <TextBox  HorizontalAlignment="Right" Grid.Row ="9" Grid.Column="1" 
+						Text="{Binding Password, Mode=TwoWay}"  
+						Height="23" TextWrapping="Wrap" Margin="4" 
+						VerticalAlignment="Top" Width="240" />
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="10" Margin="4" Text="Image:"/>
+                    
+                    <Border Grid.Row="10"  Grid.Column="10" BorderBrush="AliceBlue" BorderThickness="5">
+                        <Button Height="200" Width="230" >
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image x:Name="imgEmp"  Grid.Row="10" Source="{Binding UserImageSelection.Image, Converter={StaticResource ByteArrayToImageConverter}, Mode=TwoWay}" Grid.Column="10"  />
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Border>
+                    <Button x:Name="btnPic" Grid.Row="11" Grid.Column="2" Width="200" Height="50" Click="btnPic_click" Background="White"  Content="Take Picture"></Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="List">
+                <Grid Height="262" Width="400" Background="White">
+                <DataGrid AutoGenerateColumns="False" Background="White"
+                  ItemsSource="{Binding WorkAliasCollection.Source}"
                   HeadersVisibility="Column"
                   SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
                   SelectionMode="Single"
-                  CanUserAddRows="True"
-                  CanUserDeleteRows="False" Margin="0,0,-57,0"
-                  >
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding TheUser.FirstName, Mode=TwoWay}"  Header="Firs Name" />
-                <DataGridTextColumn Binding="{Binding TheUser.LastName, Mode=TwoWay}"  Header="Last Name" />
-                <DataGridTextColumn Binding="{Binding TheUser.Surname, Mode=TwoWay}"  Header="Surname" />
-                <DataGridTextColumn Binding="{Binding TheUser.mail, Mode=TwoWay }"  Header="Mail" />
-                <DataGridTextColumn Binding="{Binding TheUser.phonenumber, Mode=TwoWay}"  Header="PhoneNumber" />
-                <DataGridTextColumn Binding="{Binding TheUser.city, Mode=TwoWay}"  Header="City" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <TextBlock Text="{Binding ErrorMessage}"  HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  CanUserResizeColumns="False"
+                  CanUserAddRows="False"
+                  AllowDrop="False"
+                  CanUserDeleteRows="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding FirstName, Mode=TwoWay}" Width="100"  Header="Firs Name" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding LastName, Mode=TwoWay}" Width="100"  Header="Last Name" />
+                        <DataGridTextColumn IsReadOnly="True"  Binding="{Binding Mail, Mode=TwoWay }" Width="133" Header="Mail" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding UserLevel, Mode=TwoWay}"  Header="User Level" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

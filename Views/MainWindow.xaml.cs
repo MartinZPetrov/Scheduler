@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using Scheduler.Messages;
+using Scheduler.Support;
 using Scheduler.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -24,13 +25,42 @@ namespace Scheduler
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel ViewModel { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             Style = (Style)FindResource(typeof(Window));
             Messenger.Default.Register<NavigateMessage>(this, (action) => ShowUserControl(action));
             Messenger.Default.Register<UserMessage>(this, (action) => ReceiveUserMessage(action));
-            this.DataContext = new MainWindowViewModel();
+            Messenger.Default.Register<FormModeMessage>(this, (action) => SetFormCaption(action));
+            Messenger.Default.Register<EnableRibbonMessage>(this, (action) => EnableRibbon(action));
+            ViewModel = this.DataContext as MainWindowViewModel;
+
+            if (!AppSettings.Instance.IsUserLogged)
+            {
+                ribbonBar.IsEnabled = false;
+                ViewModel.Views[4].NavigateExecute();
+            }
+            
+            AppSettings.Instance.SiteRef = 4;
+        }
+
+        private void EnableRibbon(EnableRibbonMessage msg)
+        {
+            ribbonBar.IsEnabled = msg.Enabled;
+            ViewModel.Views[3].NavigateExecute();
+        }
+
+        private void SetFormCaption(FormModeMessage msg)
+        {
+            if (string.IsNullOrEmpty(msg.Message))
+            {
+                this.Title = "Scheduler";
+            }
+            else
+            {
+                this.Title = "Scheduler" + " -  " + msg.Message;
+            }
         }
 
         private void ReceiveUserMessage(UserMessage msg)
@@ -42,7 +72,13 @@ namespace Scheduler
         }
         private void ShowUserControl(NavigateMessage nm)
         {
+            nm.View.Visibility = Visibility.Visible;
             EditFrame.Content = nm.View;
+        }
+
+        private void EditFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            ((Frame)sender).NavigationService.RemoveBackEntry();
         }
     }
 }

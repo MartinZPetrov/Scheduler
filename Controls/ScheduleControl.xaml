@@ -1,0 +1,663 @@
+﻿<UserControl x:Class="Scheduler.Controls.ScheduleControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:ctrl ="clr-namespace:Scheduler.Controls"
+             xmlns:local="clr-namespace:Scheduler"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+
+    <UserControl.Resources>
+        <!--<Style x:Key="GroupHeaderStyle" TargetType ="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <StackPanel Background="LightBlue">
+                            <TextBlock Text="{Binding Path=Name, StringFormat={}{0:dddd dd.MM.yyyy}}"/>
+                            <ItemsPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
+        <Style x:Key="MonthButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="4,2" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Black" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CellStyle" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Foreground" Value="Black" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="local:ADPs.IsCellSelected" Value="True"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="local:ADPs.IsCellSelected" Value="False"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <local:ValueToBrushConverter x:Key="ValueToBrushConverter" />
+        <local:BooleanToBrushConverter x:Key="BoleanToBrushConverter" />
+        <local:ScheduleToValueConverter x:Key="ScheduleToValueConverter" />
+
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Expander  Grid.Column="0" IsExpanded="{Binding IsExpandedAll}" />
+                <Button Command="{Binding AcceptSchedule}" Background="AliceBlue" Grid.Column="1">Accept Schedule</Button>
+                <Border Background="AliceBlue" Grid.Column="2"/>
+                <TextBlock Text="{Binding Path=Caption,Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Grid.Column="2" >
+
+                </TextBlock>
+                <Button Click="CLose_CLick" Grid.Column="3" Height="20">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image HorizontalAlignment="Right" FlowDirection="RightToLeft" Source="pack://application:,,,/Icons/close.png"  />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            <StackPanel Orientation="Horizontal">
+                <DataGrid x:Name="dgSchedules" Grid.Row="1"
+                        AutoGenerateColumns="False" 
+                        Background="White"
+                        HeadersVisibility="All"
+						CanUserResizeColumns="True"
+                        CanUserResizeRows="False"
+                        RowHeaderWidth="0" 
+                        Height="500"
+                        CellEditEnding="dgSchedules_CellEditEnding"
+                        MouseMove="dgSchedules_MouseMove"
+                        SelectionUnit="Cell"
+                        SelectionMode="Extended"
+                        SelectedCellsChanged="dgSchedules_SelectedCellsChanged"
+                        CurrentCellChanged="dgSchedules_CurrentCellChanged"
+                        SelectedItem="{Binding DgSelectedScheduleDetail, Mode=TwoWay,UpdateSourceTrigger=Default}"
+						CanUserAddRows="False"
+						AllowDrop="False"
+						CanUserDeleteRows="False" >
+
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="local:ADPs.IsCellSelected" Value="True">
+                                    <Setter Property="BorderThickness" Value="2"/>
+                                    <Setter Property="BorderBrush" Value="Green"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn  IsReadOnly="True"
+								Binding="{Binding Day, StringFormat={}{0:dddd dd.MM.yyyy}}"
+							    Width="150"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                        </DataGridTextColumn>
+
+                        
+                        <DataGridTextColumn  Visibility="Collapsed"
+								Binding="{Binding Col1, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                 
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col1" Mode="TwoWay" />
+                                                <Binding Path="Group_Ref"/>
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col2, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col2" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col3, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col3" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col4, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col4" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col5, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col5" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col6, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col6" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col7, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col7" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col8, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col8" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col9, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col9" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed" 
+								Binding="{Binding Col10,  Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"   
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col10" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col11, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                            local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col11" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn  Visibility="Collapsed"
+								Binding="{Binding Col12, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+                                local:ADPs.Tag=""
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col12" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed" 
+								Binding="{Binding Col13, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col13" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col14,  Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}   }"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col14" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col15, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col15" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col16, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col16" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col17, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col17" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col18, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col18" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col19, Mode=TwoWay,  UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col19" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col20, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col20" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col21, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col21" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col22, Mode=TwoWay,UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                local:ADPs.Tag=""
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col22" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col23, Mode=TwoWay,UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}" 
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col23" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Visibility="Collapsed"
+								Binding="{Binding Col24, Mode=TwoWay, UpdateSourceTrigger=Default, Converter={StaticResource ScheduleToValueConverter}}"
+								Width="100"
+                                CellStyle="{StaticResource CellStyle}"
+								Header="Day" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource ValueToBrushConverter }">
+                                                <Binding Path="Col24" />
+                                                <Binding Path="Group_Ref" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridComboBoxColumn
+								Width="100"
+                                DisplayMemberPath="Description"
+                                SelectedValuePath="Group_Ref"
+                                SelectedValueBinding="{Binding Group_Ref, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								Header="Worker" >
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style TargetType="{x:Type ComboBox}">
+                                    <Setter Property="ItemsSource" Value="{Binding Path=DataContext.ScheduleGroups, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
+
+                            <DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="{x:Type ComboBox}">
+                                    <Setter Property="ItemsSource" Value="{Binding Path=DataContext.ScheduleGroups, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                                </Style>
+                            </DataGridComboBoxColumn.EditingElementStyle>
+                        </DataGridComboBoxColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.EmployeePickList , RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                    </DataGrid.InputBindings>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="Context_Delete"/>
+                            <MenuItem Header="Insert" Click="Context_Insert"/>
+                            <MenuItem Header="Copy" Click="Context_Copy"/>
+                            <MenuItem Header="Paste" Click="Context_Paste"/>
+                            <MenuItem Header="{Binding CopyText, Mode=TwoWay}" Click="CopyDay"/>
+                            <MenuItem Header="{Binding PasteText, Mode=TwoWay}" Click="PasteDay" />
+                            <MenuItem Header="Copy week" Click="CopyWeek" />
+                            <MenuItem Header="Paste week" Click="PasteWeek" />
+                            <!--<MenuItem Header="Choose Week" Click="Choose_Week"/>-->
+                            <MenuItem Header="Choose Employee" Click="Choose_Employee" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander IsExpanded="True">
+                                                    <Expander.Header>
+                                                        <DockPanel>
+                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name, StringFormat={}{0:dddd dd.MM.yyyy}}" Margin="5,0,0,0"/>
+                                                        </DockPanel>
+                                                    </Expander.Header>
+                                                    <Expander.Content>
+                                                        <ItemsPresenter />
+                                                    </Expander.Content>
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+
+                </DataGrid>
+                <Grid>
+                    <ctrl:PickList x:Name="empPL" Visibility="Collapsed"></ctrl:PickList>
+                    <ctrl:FavouriteWeekControl x:Name="favWeekControl" Visibility="Collapsed" />
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

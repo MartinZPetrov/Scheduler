@@ -1,0 +1,456 @@
+﻿<UserControl x:Class="Scheduler.Views.ScheduleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"              
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             DataContext="{Binding Schedules, Source={StaticResource Locator}}"
+             xmlns:ctrl ="clr-namespace:Scheduler.Controls"
+             xmlns:local="clr-namespace:Scheduler">
+
+    <UserControl.Resources>
+        <Style x:Key="GroupHeaderStyle" TargetType ="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <StackPanel Background="LightBlue">
+                            <TextBlock Text="{Binding Path=Name, StringFormat={}{0:dddd dd.MM.yyyy}}"/>
+                            <ItemsPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MonthButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="4,2" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="Black" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CellStyle" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Foreground" Value="Black" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{x:Null}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <local:ValueToBrushConverter x:Key="ValueToBrushConverter" />
+        <local:BooleanToBrushConverter x:Key="BoleanToBrushConverter" />
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot"  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl HorizontalAlignment="Left"  Grid.Row="1" Grid.Column="1" >
+            <TabItem Header="View" x:Name="tiEdit">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock HorizontalAlignment="Right"   Margin="4" Text="Year:"/>
+                    <xctk:IntegerUpDown  HorizontalAlignment="Left" Grid.Column="1" Margin="4" ValueChanged="IntegerUpDown_ValueChanged"
+                                    Value="{Binding CurrentSelectedYear, Mode=TwoWay}"
+                                    VerticalAlignment="Center"
+		                        />
+                    <TextBlock HorizontalAlignment="Right" Margin="4" Grid.Row="1" Text="Start Time:"></TextBlock>
+                    <xctk:DateTimeUpDown Value="{Binding StartTime}" Grid.Row="1" Grid.Column="1" Format="Custom" FormatString="HH" Margin="4"/>
+
+                    <TextBlock HorizontalAlignment="Right" Margin="4" Grid.Row="2" Text="End Time:"></TextBlock>
+                    <xctk:DateTimeUpDown Value="{Binding EndTime}" Grid.Row="2" Grid.Column="1" Format="Custom" FormatString="HH" Margin="4"/>
+
+                    <Button Grid.Row="3" Background="{Binding AcceptedSchedules[0], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}" GotFocus="Button_GotFocus"
+                            Width="70" Height="50" Command="{Binding CreateSheduleJan}" Margin="5" Content="January">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[0]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[0]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="3"   Background="{Binding AcceptedSchedules[1], Converter={StaticResource BoleanToBrushConverter}}"  Style="{StaticResource MonthButton}"
+                            Grid.Column="1" Width="70" Command="{Binding CreateSheduleFeb}" Height="50" Margin="5" Content="February">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[1]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[1]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="3"  Background="{Binding AcceptedSchedules[2], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="2" Width="70"  Command="{Binding CreateSheduleMar}" Height="50" Margin="5" Content="March" >
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[2]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[2]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="3" Background="{Binding AcceptedSchedules[3], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="3" Width="70" Command="{Binding CreateSheduleApr}" Height="50" Margin="5" Content="April">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[3]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[3]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="4" Background="{Binding AcceptedSchedules[4], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="0" Width="70"  Command="{Binding CreateSheduleMay}" Height="50" Margin="5" Content="May">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[4]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[4]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="4" Background="{Binding AcceptedSchedules[5], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="1" Width="70" Command="{Binding CreateSheduleJun}" Height="50" Margin="5" Content="June">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[5]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[5]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="4" Background="{Binding AcceptedSchedules[6], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="2" Width="70" Command="{Binding CreateSheduleJul}" Height="50" Margin="5" Content="July">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[6]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[6]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="4" Background="{Binding AcceptedSchedules[7], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="3" Width="70" Command="{Binding CreateSheduleAug}" Height="50" Margin="5" Content="August">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[7]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[7]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="5" Background="{Binding AcceptedSchedules[8], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="0" Width="70" Command="{Binding CreateSheduleSep}" Height="50" Margin="5" Content="September">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[8]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[8]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="5" Background="{Binding AcceptedSchedules[9], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="1" Width="70"  Command="{Binding CreateSheduleOct}" Height="50" Margin="5" Content="October">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[9]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[9]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="5" Background="{Binding AcceptedSchedules[10], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="2" Width="70" Command="{Binding CreateSheduleNov}" Height="50" Margin="5" Content="November">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[10]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[10]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <Button Grid.Row="5" Background="{Binding AcceptedSchedules[11], Converter={StaticResource BoleanToBrushConverter}}" Style="{StaticResource MonthButton}"
+                            Grid.Column="3" Width="70" Command="{Binding CreateSheduleDec}" Height="50" Margin="5" Content="December">
+                        <Button.ToolTip>
+                            <ToolTip >
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">Start Time:</TextBlock>
+                                        <TextBlock Text="{Binding StartTimeText[11]}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold">End Time:</TextBlock>
+                                        <TextBlock Text="{Binding EndTimeText[11]}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Canvas >
+            <Thumb Name="tmpJan" DragDelta="tmpJan_DragDelta" Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleJan" MonthSchedule="1" Visibility="Collapsed"  >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        
+        <Canvas>
+            <Thumb Name="tmpFeb" DragDelta="tmpFeb_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleFeb" MonthSchedule="2" Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        
+        <Canvas>
+            <Thumb Name="tmpMarch" DragDelta="tmpMarch_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleMarch" MonthSchedule="3"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+
+        <Canvas>
+            <Thumb Name="tmpApril" DragDelta="tmpApril_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleApr" MonthSchedule="4"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        
+        <Canvas>
+            <Thumb Name="tmpMay" DragDelta="tmpMay_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleMay" MonthSchedule="5" Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+
+        <Canvas>
+            <Thumb Name="tmpJun" DragDelta="tmpJun_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleJun" MonthSchedule="6"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+
+        <Canvas>
+            <Thumb Name="tmpJul" DragDelta="tmpJul_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleJul" MonthSchedule="7"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+
+        <Canvas>
+            <Thumb Name="tmpAug" DragDelta="tmpAug_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleAug" MonthSchedule="8"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+
+        <Canvas>
+            <Thumb Name="tmpSep" DragDelta="tmpSep_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleSep" MonthSchedule="9"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+
+        <Canvas>
+            <Thumb Name="tmpOct" DragDelta="tmpOct_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleOct" MonthSchedule="10"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        
+        <Canvas>
+            <Thumb Name="tmpNov" DragDelta="tmpNov_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleNov" MonthSchedule="11"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        
+        <Canvas>
+            <Thumb Name="tmpDec" DragDelta="tmpDec_DragDelta"  Canvas.Left="0" Canvas.Top="0" >
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <ctrl:ScheduleControl x:Name="ctrlScheduleDec" MonthSchedule="12"  Visibility="Collapsed" >
+                        </ctrl:ScheduleControl>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Canvas>
+        
+    </Grid>
+</UserControl>

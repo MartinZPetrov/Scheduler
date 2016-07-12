@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Scheduler.ViewModel
@@ -25,7 +26,7 @@ namespace Scheduler.ViewModel
         {
             if (View == null && ViewType != null)
             {
-                View = (UserControl)Activator.CreateInstance(ViewType);
+                View = (UserControl)Activator.CreateInstance(ViewType);  
             }
             var msg = new NavigateMessage { View = View, ViewModelType = ViewModelType, ViewType = ViewType };
             Messenger.Default.Send<NavigateMessage>(msg);

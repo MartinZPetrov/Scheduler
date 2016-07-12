@@ -14,12 +14,37 @@ namespace Scheduler.Models
     
     public partial class User
     {
+        public User()
+        {
+            this.FirstName = "";
+            this.LastName = "";
+            this.SurName = "";
+            this.Mail = "";
+            this.City = "";
+            this.IsManager = false;
+            this.IsActive = false;
+            this.UserLevel = 0;
+            this.PhoneNumber = "";
+            this.SiteMembers = new ObservableCollection<SiteMember>();
+            this.GroupMembers = new ObservableCollection<GroupMember>();
+            this.Works = new ObservableCollection<Work>();
+        }
+    
         public int User_ref { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Surname { get; set; }
-        public string mail { get; set; }
-        public string phonenumber { get; set; }
-        public string city { get; set; }
+        public string SurName { get; set; }
+        public string Mail { get; set; }
+        public string City { get; set; }
+        public bool IsManager { get; set; }
+        public bool IsActive { get; set; }
+        public int UserLevel { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Password { get; set; }
+    
+        public virtual ObservableCollection<SiteMember> SiteMembers { get; set; }
+        public virtual ObservableCollection<GroupMember> GroupMembers { get; set; }
+        public virtual UserImage UserImage { get; set; }
+        public virtual ObservableCollection<Work> Works { get; set; }
     }
 }

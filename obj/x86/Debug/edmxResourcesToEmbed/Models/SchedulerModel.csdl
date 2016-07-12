@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchedulerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="User_ref" />
+    </Key>
+    <Property Name="User_ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+    <Property Name="SurName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+    <Property Name="Mail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+    <Property Name="IsManager" Type="Boolean" Nullable="false" DefaultValue="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" DefaultValue="false" />
+    <Property Name="UserLevel" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+    <NavigationProperty Name="SiteMembers" Relationship="SchedulerModel.FK_SiteMembers_User" FromRole="User" ToRole="SiteMember" />
+    <NavigationProperty Name="GroupMembers" Relationship="SchedulerModel.FK_GroupMembers_Users" FromRole="User" ToRole="GroupMember" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="UserImage" Relationship="SchedulerModel.FK_UserImages_User" FromRole="User" ToRole="UserImage" />
+    <NavigationProperty Name="Works" Relationship="SchedulerModel.FK_Work_User" FromRole="User" ToRole="Work" />
+  </EntityType>
+  <EntityContainer Name="SchedulerContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="Sites" EntityType="SchedulerModel.Site" />
+    <EntitySet Name="SiteMembers" EntityType="SchedulerModel.SiteMember" />
+    <AssociationSet Name="FK_SiteMembers_Site" Association="SchedulerModel.FK_SiteMembers_Site">
+      <End Role="Site" EntitySet="Sites" />
+      <End Role="SiteMember" EntitySet="SiteMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SiteMembers_User" Association="SchedulerModel.FK_SiteMembers_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="SiteMember" EntitySet="SiteMembers" />
+    </AssociationSet>
+    <EntitySet Name="Groups" EntityType="SchedulerModel.Group" />
+    <EntitySet Name="GroupMembers" EntityType="SchedulerModel.GroupMember" />
+    <AssociationSet Name="FK_GroupMembers_Groups" Association="SchedulerModel.FK_GroupMembers_Groups">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="GroupMember" EntitySet="GroupMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupMembers_Users" Association="SchedulerModel.FK_GroupMembers_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="GroupMember" EntitySet="GroupMembers" />
+    </AssociationSet>
+    <EntitySet Name="Schedules" EntityType="SchedulerModel.Schedule" />
+    <EntitySet Name="Scheduledetails" EntityType="SchedulerModel.Scheduledetail" />
+    <AssociationSet Name="FK_Scheduledetails_Group" Association="SchedulerModel.FK_Scheduledetails_Group">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="Scheduledetail" EntitySet="Scheduledetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Scheduledetails_Schedule" Association="SchedulerModel.FK_Scheduledetails_Schedule">
+      <End Role="Schedule" EntitySet="Schedules" />
+      <End Role="Scheduledetail" EntitySet="Scheduledetails" />
+    </AssociationSet>
+    <EntitySet Name="Logs" EntityType="SchedulerModel.Log" />
+    <AssociationSet Name="FK_Schedule_Site" Association="SchedulerModel.FK_Schedule_Site">
+      <End Role="Site" EntitySet="Sites" />
+      <End Role="Schedule" EntitySet="Schedules" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SchedulerModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SchedulerModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="sysdiagrams" EntityType="SchedulerModel.sysdiagram" />
+    <EntitySet Name="UserImages" EntityType="SchedulerModel.UserImage" />
+    <AssociationSet Name="FK_UserImages_User" Association="SchedulerModel.FK_UserImages_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserImage" EntitySet="UserImages" />
+    </AssociationSet>
+    <EntitySet Name="Works" EntityType="SchedulerModel.Work" />
+    <AssociationSet Name="FK_Work_Site" Association="SchedulerModel.FK_Work_Site">
+      <End Role="Site" EntitySet="Sites" />
+      <End Role="Work" EntitySet="Works" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Work_User" Association="SchedulerModel.FK_Work_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Work" EntitySet="Works" />
+    </AssociationSet>
+    <EntitySet Name="WorkImages" EntityType="SchedulerModel.WorkImage" />
+    <AssociationSet Name="FK_WorkImages_Work" Association="SchedulerModel.FK_WorkImages_Work">
+      <End Role="Work" EntitySet="Works" />
+      <End Role="WorkImage" EntitySet="WorkImages" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Site">
+    <Key>
+      <PropertyRef Name="Site_Ref" />
+    </Key>
+    <Property Name="Site_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <NavigationProperty Name="SiteMembers" Relationship="SchedulerModel.FK_SiteMembers_Site" FromRole="Site" ToRole="SiteMember" />
+    <NavigationProperty Name="Schedules" Relationship="SchedulerModel.FK_Schedule_Site" FromRole="Site" ToRole="Schedule" />
+    <NavigationProperty Name="Works" Relationship="SchedulerModel.FK_Work_Site" FromRole="Site" ToRole="Work" />
+  </EntityType>
+  <EntityType Name="SiteMember">
+    <Key>
+      <PropertyRef Name="SiteMember_Ref" />
+    </Key>
+    <Property Name="SiteMember_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Site_Ref" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="User_Ref" Type="Int32" Nullable="false" DefaultValue="0" />
+    <NavigationProperty Name="Site" Relationship="SchedulerModel.FK_SiteMembers_Site" FromRole="SiteMember" ToRole="Site" />
+    <NavigationProperty Name="User" Relationship="SchedulerModel.FK_SiteMembers_User" FromRole="SiteMember" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_SiteMembers_Site">
+    <End Type="SchedulerModel.Site" Role="Site" Multiplicity="1" />
+    <End Type="SchedulerModel.SiteMember" Role="SiteMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Site_Ref" />
+      </Principal>
+      <Dependent Role="SiteMember">
+        <PropertyRef Name="Site_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SiteMembers_User">
+    <End Type="SchedulerModel.User" Role="User" Multiplicity="1" />
+    <End Type="SchedulerModel.SiteMember" Role="SiteMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="SiteMember">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="Group_Ref" />
+    </Key>
+    <Property Name="Group_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <NavigationProperty Name="GroupMembers" Relationship="SchedulerModel.FK_GroupMembers_Groups" FromRole="Group" ToRole="GroupMember" />
+    <NavigationProperty Name="Scheduledetails" Relationship="SchedulerModel.FK_Scheduledetails_Group" FromRole="Group" ToRole="Scheduledetail" />
+    <Property Name="Color" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="GroupMember">
+    <Key>
+      <PropertyRef Name="GroupMembers" />
+    </Key>
+    <Property Name="GroupMembers" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Group_Ref" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="User_Ref" Type="Int32" Nullable="false" DefaultValue="0" />
+    <NavigationProperty Name="Group" Relationship="SchedulerModel.FK_GroupMembers_Groups" FromRole="GroupMember" ToRole="Group" />
+    <NavigationProperty Name="User" Relationship="SchedulerModel.FK_GroupMembers_Users" FromRole="GroupMember" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_GroupMembers_Groups">
+    <End Type="SchedulerModel.Group" Role="Group" Multiplicity="1" />
+    <End Type="SchedulerModel.GroupMember" Role="GroupMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Group_Ref" />
+      </Principal>
+      <Dependent Role="GroupMember">
+        <PropertyRef Name="Group_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupMembers_Users">
+    <End Type="SchedulerModel.User" Role="User" Multiplicity="1" />
+    <End Type="SchedulerModel.GroupMember" Role="GroupMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="GroupMember">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Schedule">
+    <Key>
+      <PropertyRef Name="Schedule_Ref" />
+    </Key>
+    <Property Name="Schedule_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FromDate" Type="DateTime" Precision="0" />
+    <Property Name="ToDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Scheduledetails" Relationship="SchedulerModel.FK_Scheduledetails_Schedule" FromRole="Schedule" ToRole="Scheduledetail" />
+    <Property Name="StartTime" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="EndTime" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="Accepted" Type="Boolean" Nullable="false" />
+    <Property Name="Site_Ref" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Site" Relationship="SchedulerModel.FK_Schedule_Site" FromRole="Schedule" ToRole="Site" />
+  </EntityType>
+  <EntityType Name="Scheduledetail">
+    <Key>
+      <PropertyRef Name="ScheduleDetails_Ref" />
+    </Key>
+    <Property Name="ScheduleDetails_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Schedule_Ref" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="Group_Ref" Type="Int32" Nullable="false" DefaultValue="0" />
+    <Property Name="Day" Type="DateTime" Precision="0" />
+    <Property Name="Col1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col3" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col4" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col5" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col6" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col7" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col8" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col9" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col10" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col11" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col12" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col13" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col14" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col15" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col16" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col17" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col18" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col19" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col20" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col21" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col22" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col23" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <Property Name="Col24" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="" />
+    <NavigationProperty Name="Group" Relationship="SchedulerModel.FK_Scheduledetails_Group" FromRole="Scheduledetail" ToRole="Group" />
+    <NavigationProperty Name="Schedule" Relationship="SchedulerModel.FK_Scheduledetails_Schedule" FromRole="Scheduledetail" ToRole="Schedule" />
+    <Property Name="WeekNum" Type="Int32" Nullable="false" />
+    <Property Name="WeekStart" Type="DateTime" Precision="0" />
+    <Property Name="WekkEnd" Type="DateTime" Precision="0" />
+  </EntityType>
+  <Association Name="FK_Scheduledetails_Group">
+    <End Type="SchedulerModel.Group" Role="Group" Multiplicity="1" />
+    <End Type="SchedulerModel.Scheduledetail" Role="Scheduledetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Group_Ref" />
+      </Principal>
+      <Dependent Role="Scheduledetail">
+        <PropertyRef Name="Group_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Scheduledetails_Schedule">
+    <End Type="SchedulerModel.Schedule" Role="Schedule" Multiplicity="1" />
+    <End Type="SchedulerModel.Scheduledetail" Role="Scheduledetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Schedule">
+        <PropertyRef Name="Schedule_Ref" />
+      </Principal>
+      <Dependent Role="Scheduledetail">
+        <PropertyRef Name="Schedule_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Thread" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Level" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Logger" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Message" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
+    <Property Name="Exception" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_Schedule_Site">
+    <End Type="SchedulerModel.Site" Role="Site" Multiplicity="1" />
+    <End Type="SchedulerModel.Schedule" Role="Schedule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Site_Ref" />
+      </Principal>
+      <Dependent Role="Schedule">
+        <PropertyRef Name="Site_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="UserImage">
+    <Key>
+      <PropertyRef Name="User_Ref" />
+    </Key>
+    <Property Name="Image_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="User_Ref" Type="Int32" Nullable="false" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="User" Relationship="SchedulerModel.FK_UserImages_User" FromRole="UserImage" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_UserImages_User">
+    <End Type="SchedulerModel.User" Role="User" Multiplicity="1" />
+    <End Type="SchedulerModel.UserImage" Role="UserImage" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="UserImage">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Work">
+    <Key>
+      <PropertyRef Name="Work_Ref" />
+    </Key>
+    <Property Name="Work_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="User_Ref" Type="Int32" Nullable="false" />
+    <Property Name="Site_Ref" Type="Int32" Nullable="false" />
+    <Property Name="WorkStart" Type="DateTime" Precision="3" />
+    <Property Name="WorkEnd" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Site" Relationship="SchedulerModel.FK_Work_Site" FromRole="Work" ToRole="Site" />
+    <NavigationProperty Name="User" Relationship="SchedulerModel.FK_Work_User" FromRole="Work" ToRole="User" />
+    <Property Name="WorkDay" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="WorkImages" Relationship="SchedulerModel.FK_WorkImages_Work" FromRole="Work" ToRole="WorkImage" />
+  </EntityType>
+  <Association Name="FK_Work_Site">
+    <End Type="SchedulerModel.Site" Role="Site" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="SchedulerModel.Work" Role="Work" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Site_Ref" />
+      </Principal>
+      <Dependent Role="Work">
+        <PropertyRef Name="Site_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Work_User">
+    <End Type="SchedulerModel.User" Role="User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="SchedulerModel.Work" Role="Work" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ref" />
+      </Principal>
+      <Dependent Role="Work">
+        <PropertyRef Name="User_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="WorkImage">
+    <Key>
+      <PropertyRef Name="WorkImage_Ref" />
+    </Key>
+    <Property Name="WorkImage_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Work_Ref" Type="Int32" Nullable="false" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="Work" Relationship="SchedulerModel.FK_WorkImages_Work" FromRole="WorkImage" ToRole="Work" />
+    <Property Name="IsWorkStart" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_WorkImages_Work">
+    <End Type="SchedulerModel.Work" Role="Work" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="SchedulerModel.WorkImage" Role="WorkImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Work">
+        <PropertyRef Name="Work_Ref" />
+      </Principal>
+      <Dependent Role="WorkImage">
+        <PropertyRef Name="Work_Ref" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

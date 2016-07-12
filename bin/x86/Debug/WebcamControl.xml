@@ -1,0 +1,97 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+WebcamControl
+</name>
+</assembly>
+<members>
+<member name="M:Scheduler.Webcam.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:Scheduler.Webcam">
+	<summary>
+Webcam
+</summary>
+</member><member name="P:Scheduler.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Scheduler.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Scheduler.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="P:Scheduler.Webcam.VideoFileFormat">
+	<summary>
+ Gets the video format in which the webcam video will be saved.
+ </summary>
+</member><member name="P:Scheduler.Webcam.SnapshotFormat">
+	<summary>
+ Gets or Sets the format used when saving video snapshot.
+ </summary>
+</member><member name="P:Scheduler.Webcam.VideoDevice">
+	<summary>
+ Gets or Sets the name of the video device.
+ </summary>
+</member><member name="P:Scheduler.Webcam.AudioDevice">
+	<summary>
+ Gets or Sets the name of the audio device.
+ </summary>
+</member><member name="P:Scheduler.Webcam.VideoName">
+	<summary>
+ Gets or Sets the name of the video file. (The name should not include the file extension).
+ </summary>
+</member><member name="P:Scheduler.Webcam.VideoDirectory">
+	<summary>
+ Gets or Sets the folder where the recorded video will be saved.
+ </summary>
+</member><member name="P:Scheduler.Webcam.ImageDirectory">
+	<summary>
+ Gets or Sets the folder where video snapshot will be saved.
+ </summary>
+</member><member name="P:Scheduler.Webcam.FrameRate">
+	<summary>
+ Gets or sets the frame rate, in frames per second. Default value is 15.
+ </summary>
+</member><member name="P:Scheduler.Webcam.Bitrate">
+	<summary>
+ Gets or sets the bitrate. Default value is 2000.
+ </summary>
+</member><member name="P:Scheduler.Webcam.FrameSize">
+	<summary>
+ Gets or sets the size of the video profile. Default is 320x240.
+ </summary>
+</member><member name="P:Scheduler.Webcam.IsRecording">
+	<summary>
+ Gets a value indicating whether video recording is taking place.
+ </summary>
+</member><member name="M:Scheduler.Webcam.StartPreview">
+	<summary>
+ Displays webcam video.
+ </summary>
+</member><member name="M:Scheduler.Webcam.StopPreview">
+	<summary>
+ Stops the display of webcam video.
+ </summary>
+</member><member name="M:Scheduler.Webcam.StartRecording">
+	<summary>
+ Starts the recording of webcam images to a video file.
+ </summary>
+</member><member name="M:Scheduler.Webcam.StopRecording">
+	<summary>
+ Stops the recording of webcam video.
+ </summary>
+</member><member name="M:Scheduler.Webcam.TakeSnapshot">
+	<summary>
+ Takes a snapshot of an webcam image.
+ The size of the image will be equal to the size of the control.
+ </summary>
+</member>
+</members>
+</doc>

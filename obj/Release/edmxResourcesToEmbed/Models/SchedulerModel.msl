@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SchedulerModelStoreContainer" CdmEntityContainer="SchedulerContext">
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="SchedulerModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="UserLevel" ColumnName="UserLevel" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="IsManager" ColumnName="IsManager" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Mail" ColumnName="Mail" />
+          <ScalarProperty Name="SurName" ColumnName="SurName" />
+          <ScalarProperty Name="User_ref" ColumnName="User_ref" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sites">
+      <EntityTypeMapping TypeName="SchedulerModel.Site">
+        <MappingFragment StoreEntitySet="Site">
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Site_Ref" ColumnName="Site_Ref" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SiteMembers">
+      <EntityTypeMapping TypeName="SchedulerModel.SiteMember">
+        <MappingFragment StoreEntitySet="SiteMembers">
+          <ScalarProperty Name="User_Ref" ColumnName="User_Ref" />
+          <ScalarProperty Name="Site_Ref" ColumnName="Site_Ref" />
+          <ScalarProperty Name="SiteMember_Ref" ColumnName="SiteMember_Ref" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="SchedulerModel.Group">
+        <MappingFragment StoreEntitySet="Group">
+          <ScalarProperty Name="Color" ColumnName="Color" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Group_Ref" ColumnName="Group_Ref" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GroupMembers">
+      <EntityTypeMapping TypeName="SchedulerModel.GroupMember">
+        <MappingFragment StoreEntitySet="GroupMembers">
+          <ScalarProperty Name="User_Ref" ColumnName="User_Ref" />
+          <ScalarProperty Name="Group_Ref" ColumnName="Group_Ref" />
+          <ScalarProperty Name="GroupMembers" ColumnName="GroupMembers" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Schedules">
+      <EntityTypeMapping TypeName="SchedulerModel.Schedule">
+        <MappingFragment StoreEntitySet="Schedule">
+          <ScalarProperty Name="Site_Ref" ColumnName="Site_Ref" />
+          <ScalarProperty Name="Accepted" ColumnName="Accepted" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="Schedule_Ref" ColumnName="Schedule_Ref" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Scheduledetails">
+      <EntityTypeMapping TypeName="SchedulerModel.Scheduledetail">
+        <MappingFragment StoreEntitySet="Scheduledetails">
+          <ScalarProperty Name="Col24" ColumnName="Col24" />
+          <ScalarProperty Name="Col23" ColumnName="Col23" />
+          <ScalarProperty Name="Col22" ColumnName="Col22" />
+          <ScalarProperty Name="Col21" ColumnName="Col21" />
+          <ScalarProperty Name="Col20" ColumnName="Col20" />
+          <ScalarProperty Name="Col19" ColumnName="Col19" />
+          <ScalarProperty Name="Col18" ColumnName="Col18" />
+          <ScalarProperty Name="Col17" ColumnName="Col17" />
+          <ScalarProperty Name="Col16" ColumnName="Col16" />
+          <ScalarProperty Name="Col15" ColumnName="Col15" />
+          <ScalarProperty Name="Col14" ColumnName="Col14" />
+          <ScalarProperty Name="Col13" ColumnName="Col13" />
+          <ScalarProperty Name="Col12" ColumnName="Col12" />
+          <ScalarProperty Name="Col11" ColumnName="Col11" />
+          <ScalarProperty Name="Col10" ColumnName="Col10" />
+          <ScalarProperty Name="Col9" ColumnName="Col9" />
+          <ScalarProperty Name="Col8" ColumnName="Col8" />
+          <ScalarProperty Name="Col7" ColumnName="Col7" />
+          <ScalarProperty Name="Col6" ColumnName="Col6" />
+          <ScalarProperty Name="Col5" ColumnName="Col5" />
+          <ScalarProperty Name="Col4" ColumnName="Col4" />
+          <ScalarProperty Name="Col3" ColumnName="Col3" />
+          <ScalarProperty Name="Col2" ColumnName="Col2" />
+          <ScalarProperty Name="Col1" ColumnName="Col1" />
+          <ScalarProperty Name="Day" ColumnName="Day" />
+          <ScalarProperty Name="Group_Ref" ColumnName="Group_Ref" />
+          <ScalarProperty Name="Schedule_Ref" ColumnName="Schedule_Ref" />
+          <ScalarProperty Name="ScheduleDetails_Ref" ColumnName="ScheduleDetails_Ref" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logs">
+      <EntityTypeMapping TypeName="SchedulerModel.Log">
+        <MappingFragment StoreEntitySet="Log">
+          <ScalarProperty Name="Exception" ColumnName="Exception" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Logger" ColumnName="Logger" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="Thread" ColumnName="Thread" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

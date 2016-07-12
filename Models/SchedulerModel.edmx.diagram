@@ -4,8 +4,30 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="00e8ef8132484719afa611c4e1ffd9b6" Name="Diagram1">
+      <Diagram DiagramId="00e8ef8132484719afa611c4e1ffd9b6" Name="Diagram1" ZoomLevel="92">
         <EntityTypeShape EntityType="SchedulerModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SchedulerModel.Site" Width="1.5" PointX="3.125" PointY="0.75" />
+        <EntityTypeShape EntityType="SchedulerModel.SiteMember" Width="1.5" PointX="5.25" PointY="0.875" />
+        <AssociationConnector Association="SchedulerModel.FK_SiteMembers_Site" />
+        <AssociationConnector Association="SchedulerModel.FK_SiteMembers_User" />
+        <EntityTypeShape EntityType="SchedulerModel.Group" Width="1.5" PointX="3.125" PointY="3.5" />
+        <EntityTypeShape EntityType="SchedulerModel.GroupMember" Width="1.5" PointX="5" PointY="3.5" />
+        <AssociationConnector Association="SchedulerModel.FK_GroupMembers_Groups" />
+        <AssociationConnector Association="SchedulerModel.FK_GroupMembers_Users" />
+        <EntityTypeShape EntityType="SchedulerModel.Schedule" Width="1.5" PointX="9.5" PointY="2.375" />
+        <EntityTypeShape EntityType="SchedulerModel.Scheduledetail" Width="1.5" PointX="7.375" PointY="0.5" />
+        <AssociationConnector Association="SchedulerModel.FK_Scheduledetails_Group" />
+        <AssociationConnector Association="SchedulerModel.FK_Scheduledetails_Schedule" />
+        <EntityTypeShape EntityType="SchedulerModel.Log" Width="1.5" PointX="11.375" PointY="1.5" />
+        <AssociationConnector Association="SchedulerModel.FK_Schedule_Site" />
+        <EntityTypeShape EntityType="SchedulerModel.sysdiagram" Width="1.5" PointX="11.375" PointY="4.125" />
+        <EntityTypeShape EntityType="SchedulerModel.UserImage" Width="1.5" PointX="1" PointY="4.875" />
+        <AssociationConnector Association="SchedulerModel.FK_UserImages_User" />
+        <EntityTypeShape EntityType="SchedulerModel.Work" Width="1.5" PointX="3.125" PointY="6.125" />
+        <AssociationConnector Association="SchedulerModel.FK_Work_Site" />
+        <AssociationConnector Association="SchedulerModel.FK_Work_User" />
+        <EntityTypeShape EntityType="SchedulerModel.WorkImage" Width="1.5" PointX="4.875" PointY="6.875" />
+        <AssociationConnector Association="SchedulerModel.FK_WorkImages_Work" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
